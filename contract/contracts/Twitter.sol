@@ -12,31 +12,31 @@ contract Twitter {
 
     mapping (address => tweet[]) tweets;
 
-    TwitterUser twitterUsers;
+    TwitterUser userManager;
     
-    constructor(address _TwitterUsers) {
-        twitterUsers = TwitterUser(_TwitterUsers);
+    constructor(address _userManager) {
+        userManager = TwitterUser(_userManager);
     }
 
     event postTracker(address indexed from, string who, string content);
 
-    modifier isValidUser() {
-         require(twitterUsers.checkIfUserExists(msg.sender), "Unregister user");
-         _;
+    modifier isLogin() {
+        require(userManager.checkIfUserLogined(msg.sender), "It is not logined");
+        _;
     }
 
-    function post(string memory content) public isValidUser {
+    function post(string memory content) public isLogin {
         tweets[msg.sender].push(tweet(block.timestamp, content));
-        string memory name = twitterUsers.checkUserName(msg.sender);
+        (string memory name, , ) = userManager.checkUserInfo(msg.sender);
         emit postTracker(msg.sender, name, content);
     }
 
-    function readPost(uint index) public view isValidUser returns(string memory, string memory, uint) {
-        if (index >= tweets[msg.sender].length) {
+    function readPost(address readFrom, uint index) public view returns(string memory, string memory, uint) {
+        if (index >= tweets[readFrom].length) {
             return ("", "", 0);
         }
-        tweet storage tw = tweets[msg.sender][index];
-        string memory name = twitterUsers.checkUserName(msg.sender);
+        tweet memory tw = tweets[readFrom][index];
+        (string memory name, , ) = userManager.checkUserInfo(readFrom);
 
         return (name, tw.tweetMessage, tw.timestamp);
     }
