@@ -15,13 +15,13 @@ import (
 )
 
 var (
-	firstAcountKey   = "707a20975dc5af51c3d95b57c20d32e95d8f607f19a4e966461416c4394f08b8"
+	firstAccountKey  = "707a20975dc5af51c3d95b57c20d32e95d8f607f19a4e966461416c4394f08b8"
 	secondAccountKey = "2a6b6829dd97420c19fa534cf064e8e810609758aa9140672bd43ed2eab4a931"
 	thirdAccountKey  = "cf5f924d716d4e2e3439312dc81205d01a1059e15c74933bb020041dc5041761"
 
-	twitterUserAddress   = "0xCfe30d5B4774048c1Dd231714B0Ac33960cd955f" // the address of the contract TwitterUser
-	twitterAddress       = "0x899299896C52797623201347Cfd4a99B6297e200" // the address of the contract Twitter
-	firstAccountAddress  = "0x4c4Db58D4B7DC8268781a23C309d016EDa18FbB8"
+	twitterUserAddress = "0xCfe30d5B4774048c1Dd231714B0Ac33960cd955f" // the address of the contract TwitterUser
+	twitterAddress     = "0x899299896C52797623201347Cfd4a99B6297e200" // the address of the contract Twitter
+	//firstAccountAddress  = "0x4c4Db58D4B7DC8268781a23C309d016EDa18FbB8"
 	secondAccountAddress = "0x5A144C215331e498E0AEBA71E358DC924BcA59D1"
 	thirdAccountAddress  = "0x77793955d13aE7F9199FB252256595b1a1631075"
 )
@@ -94,7 +94,7 @@ func Register(userAddress common.Address, name string, password string) {
 	client := CreateConn()
 	twitterUserInstance := LoadTwitterUser()
 
-	firstAccountAuth := getAuth(firstAcountKey, client)
+	firstAccountAuth := getAuth(firstAccountKey, client)
 	tx, err := twitterUserInstance.Register(firstAccountAuth, userAddress, name, password)
 	if err != nil {
 		log.Fatal(err)
@@ -114,7 +114,7 @@ func CheckUserInfo(address common.Address) {
 func Login(address common.Address, password string) {
 	client := CreateConn()
 	twitterUserInstance := LoadTwitterUser()
-	firstAccountAuth := getAuth(firstAcountKey, client)
+	firstAccountAuth := getAuth(firstAccountKey, client)
 	tx, err := twitterUserInstance.Login(firstAccountAuth, address, password)
 	if err != nil {
 		log.Fatal(err)
@@ -125,7 +125,7 @@ func Login(address common.Address, password string) {
 func Unregister(address common.Address) {
 	client := CreateConn()
 	twitterUserInstance := LoadTwitterUser()
-	firstAccountAuth := getAuth(firstAcountKey, client)
+	firstAccountAuth := getAuth(firstAccountKey, client)
 	tx, err := twitterUserInstance.Unregister(firstAccountAuth, address)
 	if err != nil {
 		log.Fatal(err)
@@ -146,7 +146,7 @@ func CheckUserNumbers() {
 func Unlogin(userAddress common.Address) {
 	client := CreateConn()
 	twitterUserInstance := LoadTwitterUser()
-	firstAccountAuth := getAuth(firstAcountKey, client)
+	firstAccountAuth := getAuth(firstAccountKey, client)
 	tx, err := twitterUserInstance.Unlogin(firstAccountAuth, userAddress)
 	if err != nil {
 		log.Fatal(err)
@@ -200,34 +200,34 @@ func ReadPost(from common.Address, index *big.Int) {
 
 func main() {
 	// callings for TwitterUser
-	//Register(common.HexToAddress(secondAccountAddress), "user1", "123456")
-	//Register(common.HexToAddress(thirdAccountAddress), "user2", "78910")
-	//CheckUserInfo(common.HexToAddress(secondAccountAddress))
-	//CheckUserInfo(common.HexToAddress(thirdAccountAddress))
-	//Login(common.HexToAddress(secondAccountAddress), "12345")
-	//CheckUserInfo(common.HexToAddress(secondAccountAddress))
-	//CheckUserNumbers()
+	Register(common.HexToAddress(secondAccountAddress), "user1", "123456")
+	Register(common.HexToAddress(thirdAccountAddress), "user2", "78910")
+	CheckUserInfo(common.HexToAddress(secondAccountAddress))
+	CheckUserInfo(common.HexToAddress(thirdAccountAddress))
+	Login(common.HexToAddress(secondAccountAddress), "12345")
+	CheckUserInfo(common.HexToAddress(secondAccountAddress))
+	CheckUserNumbers()
 
 	//callings for Twitter
-	//Post("message1-1", secondAccountKey, secondAccountAddress)
-	//Post("message1-2", secondAccountKey, secondAccountAddress)
-	//PostNumbers(common.HexToAddress(secondAccountAddress))
-	//ReadPost(common.HexToAddress(secondAccountAddress), big.NewInt(0))
-	//ReadPost(common.HexToAddress(secondAccountAddress), big.NewInt(1))
-	//ReadPost(common.HexToAddress(secondAccountAddress), big.NewInt(2)) // name=, message=, timestamp=0
+	Post("message1-1", secondAccountKey, secondAccountAddress)
+	Post("message1-2", secondAccountKey, secondAccountAddress)
+	PostNumbers(common.HexToAddress(secondAccountAddress))
+	ReadPost(common.HexToAddress(secondAccountAddress), big.NewInt(0))
+	ReadPost(common.HexToAddress(secondAccountAddress), big.NewInt(1))
+	ReadPost(common.HexToAddress(secondAccountAddress), big.NewInt(2)) // name=, message=, timestamp=0
 
-	//Post("message2-1", thirdAccountKey, thirdAccountAddress) //exception: revert It is not logined
-	//Login(common.HexToAddress(thirdAccountAddress), "7891") // exception: failed to login because of the mistched password
-	//Login(common.HexToAddress(thirdAccountAddress), "78910")
-	//CheckUserInfo(common.HexToAddress(thirdAccountAddress))
-	//Post("message2-1", thirdAccountKey, thirdAccountAddress)
-	//PostNumbers(common.HexToAddress(thirdAccountAddress))
-	//ReadPost(common.HexToAddress(thirdAccountAddress), big.NewInt(0))
+	Post("message2-1", thirdAccountKey, thirdAccountAddress) //exception: revert It is not logined
+	Login(common.HexToAddress(thirdAccountAddress), "7891")  // exception: failed to login because of the mistched password
+	Login(common.HexToAddress(thirdAccountAddress), "78910")
+	CheckUserInfo(common.HexToAddress(thirdAccountAddress))
+	Post("message2-1", thirdAccountKey, thirdAccountAddress)
+	PostNumbers(common.HexToAddress(thirdAccountAddress))
+	ReadPost(common.HexToAddress(thirdAccountAddress), big.NewInt(0))
 
-	//Unlogin(common.HexToAddress(secondAccountAddress))
-	//CheckUserInfo(common.HexToAddress(secondAccountAddress))
-	//Post("message1-3", secondAccountKey, secondAccountAddress) //exception:It is not logined
-	//Unregister(common.HexToAddress(secondAccountAddress))
-	//Login(common.HexToAddress(secondAccountAddress), "12345") //exception:address is not registered
+	Unlogin(common.HexToAddress(secondAccountAddress))
+	CheckUserInfo(common.HexToAddress(secondAccountAddress))
+	Post("message1-3", secondAccountKey, secondAccountAddress) //exception:It is not logined
+	Unregister(common.HexToAddress(secondAccountAddress))
+	Login(common.HexToAddress(secondAccountAddress), "12345") //exception:address is not registered
 	CheckUserNumbers()
 }
