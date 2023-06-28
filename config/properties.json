@@ -1,0 +1,25 @@
+{
+    "connection" : "http://127.0.0.1:8545",
+    "logging" : {
+        "Development" : true
+    },
+    "accounts" : [
+        {
+            "name": "admin",
+            "key": "707a20975dc5af51c3d95b57c20d32e95d8f607f19a4e966461416c4394f08b8",
+            "address" : "0x4c4Db58D4B7DC8268781a23C309d016EDa18FbB8"
+        },
+        {
+            "name": "user1",
+            "key": "2a6b6829dd97420c19fa534cf064e8e810609758aa9140672bd43ed2eab4a931",
+            "address" : "0x5A144C215331e498E0AEBA71E358DC924BcA59D1"
+        },
+        {
+            "name": "user2",
+            "key": "cf5f924d716d4e2e3439312dc81205d01a1059e15c74933bb020041dc5041761",
+            "address" : "0x77793955d13aE7F9199FB252256595b1a1631075"
+        }
+    ], 
+    "twitterUserAddr" : "0xCfe30d5B4774048c1Dd231714B0Ac33960cd955f",  
+    "twitterAddr": "0x899299896C52797623201347Cfd4a99B6297e200"
+}
