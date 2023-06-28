@@ -1,4 +1,4 @@
-# My distributed twitter
+# The distributed twitter
 Build a distirbuted twitter using go and ethereum blockchain
 
 # How to run codes
@@ -7,7 +7,7 @@ Build a distirbuted twitter using go and ethereum blockchain
  - Deploy smart contracts
  - Generate go-binding for all smart contracts(Optional)
  - Start Web server
- - Send Restful requests
+ - Send restful requests
 
 # Install ganache and truffle 
   Visit the official weibsite to check how to install ganache and truffle: https://trufflesuite.com/docs/truffle/
@@ -128,12 +128,256 @@ The response returned contains the transaction hash code of this request:
 }
 ```
 ## Check registered user info
+In postman, send 2 requests.
+First request: with http://127.0.0.1:8080/api/admin/users/user1 (GET)
+We see response:
+```
+{
+    "code": 200,
+    "message": "success",
+    "details": {
+        "isLogin": false,
+        "name": "user1"
+    }
+}
+```
+
+Second request: with http://127.0.0.1:8080/api/admin/users/user2 (GET)
+We see response:
+```
+{
+    "code": 200,
+    "message": "success",
+    "details": {
+        "isLogin": false,
+        "name": "user2"
+    }
+}
+```
 
 ## Login
+In postman, send one requests to login with http://127.0.0.1:8080/api/admin/users (PUT)
+Request body is like below:
+```
+{
+    "name" : "user1",
+    "password" : "123456"
+}
+```
+We see reponse:
+```
+{
+    "code": 200,
+    "message": "success",
+    "details": {
+        "tx": "0x113461bf8a5cee27edc70542f3f7150ca1fef3abdf7537e2edb2ce8572700615"
+    }
+}
+```
+Once user1 logined successfully, we send this request to verify the info of user1:
+http://127.0.0.1:8080/api/admin/users/user1 (GET)
+We get reponse like below:
+```
+{
+    "code": 200,
+    "message": "success",
+    "details": {
+        "isLogin": true,
+        "name": "user1"
+    }
+}
+```
+We notice that the value of "isLogin" for user became true
 ## Check the number of registered users
+Let's check how many users have registered for now.
+We send the request with http://127.0.0.1:8080/api/admin/users (GET)
+We get reponse like below:
+```
+{
+    "code": 200,
+    "message": "success",
+    "details": {
+        "users": 2
+    }
+}
+```
+The response indicates there are 2 users registered. That's correct because we only registered 2 users in the previous step
 ## Post message by one logined user
+In postman, send 2 requests by one user to post messages with http://127.0.0.1:8080/api/twitter/posts  (POST)
+For the first request, request body in the form of json is below:
+```
+{
+    "name" : "user1",
+    "message" : "message1-1"
+}
+```
+The response for the first request like below:
+```
+{
+    "code": 200,
+    "message": "success",
+    "details": {
+        "tx": "0xfb1c3aba8531cefe48c0770214d4477691d581a8663c6fe6e96a35a6472299ef"
+    }
+}
+```
+For the second request, request body in the form of json is below:
+```
+{
+    "name" : "user1",
+    "message" : "message1-2"
+}
+```
+The response for the second request like below:
+```
+{
+    "code": 200,
+    "message": "success",
+    "details": {
+        "tx": "0x00cbe50d588a35ea1fbc137c9fc72ca80f1fecbfe7a403fa796daf0c3e0d52e4"
+    }
+}
+```
 ## Check the number of posts by that logined user
+Send the request to check the number of posts posted by user1: http://127.0.0.1:8080/api/twitter/posts/user1 (GET)
+The response:
+```
+{
+    "code": 200,
+    "message": "success",
+    "details": {
+        "posts": 2
+    }
+}
+```
+We see that the response indicates there are 2 posts for user1, which is correct
 ## Read the content of one post posted by that logined user
-## Log
-xxx
+Since user1 has posted 2 posts. Let's check the details for each post.
+Check the first post with http://127.0.0.1:8080/api/twitter/posts/user1/0  (GET)
+The reponse is:
+```
+{
+    "code": 200,
+    "message": "success",
+    "details": {
+        "message": "message1-1",
+        "name": "user1",
+        "timestamp": 1687954762
+    }
+}
+```
+The the content of the reponse for the first post is consistent with what we sent.
+
+Check the second post with http://127.0.0.1:8080/api/twitter/posts/user1/1  (GET)
+The reponse is:
+```
+{
+    "code": 200,
+    "message": "success",
+    "details": {
+        "message": "message1-2",
+        "name": "user1",
+        "timestamp": 1687954839
+    }
+}
+```
+The the content of the reponse for the second post is consistent with what we sent.
+
+When we send the request to check the non-existing post for user1 with http://127.0.0.1:8080/api/twitter/posts/user1/2  (GET)
+We will see nothing returned in the reponse
+```
+{
+    "code": 200,
+    "message": "success",
+    "details": {
+        "message": "",
+        "name": "",
+        "timestamp": 0
+    }
+}
+```
+## Post message by one unlogined user
+Let's post a message by an unlogined user user2
+Let's first check the status of user2 to make sure it is unlogined:
+http://127.0.0.1:8080/api/admin/users/user2 (GET)
+The response like this:
+```
+{
+    "code": 200,
+    "message": "success",
+    "details": {
+        "isLogin": false,
+        "name": "user2"
+    }
+}
+```
+"isLogin" is false indicating that user2 is unlogined
+
+Then let's send a request to post a message by user2:
+http://127.0.0.1:8080/api/twitter/posts (POST) with the request body in the form of json like below:
+```
+{
+    "name" : "user2",
+    "message" : "message2-1"
+}
+```
+The response is like below:
+```
+{
+    "code": 400,
+    "message": "failed",
+    "details": "VM Exception while processing transaction: revert It is not logined"
+}
+```
+It is what we expected
+## Logout for the logined user
+We know user1 is logined. Let's logout user1 with http://127.0.0.1:8080/api/admin/users/user1/unlogin (PUT)
+The reponse is like this:
+```
+{
+    "code": 200,
+    "message": "success",
+    "details": {
+        "tx": "0x37b5abca60c67a2aaab12215fc7a78cef43997ade436bd6d788ddea60f618c00"
+    }
+}
+```
+Let's check the status of user1 with http://127.0.0.1:8080/api/admin/users/user1 (GET)
+```
+{
+    "code": 200,
+    "message": "success",
+    "details": {
+        "isLogin": false,
+        "name": "user1"
+    }
+}
+```
+We notice that the value of isLogin became false, which is what we expected
+## Unregister a register user
+Let's unregister user1 with http://127.0.0.1:8080/api/admin/users/user1 (DELETE)
+The response is like this:
+```
+{
+    "code": 200,
+    "message": "success",
+    "details": {
+        "tx": "0x658d754b71176991ce38ef5c6d64bcd5271efe7a4925244275793e4327b961f6"
+    }
+}
+```
+## Check the number of registered users after unregisteration
+Let's check the number of users with http://127.0.0.1:8080/api/admin/users (GET)
+```
+{
+    "code": 200,
+    "message": "success",
+    "details": {
+        "users": 1
+    }
+}
+```
+We see that the value of users is 1 rather than 2
+
+Thank you
 

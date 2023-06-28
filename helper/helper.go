@@ -5,6 +5,7 @@ import (
 	"crypto/ecdsa"
 	"errors"
 	"math/big"
+	"strconv"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -60,4 +61,9 @@ func GetAuth(key string, client *ethclient.Client) (*bind.TransactOpts, error) {
 	//auth.GasLimit = uint64(300000) // in units
 	//auth.GasPrice = gasPrice
 	return auth, nil
+}
+
+func StringToUint(s string) uint {
+	i, _ := strconv.Atoi(s)
+	return uint(i)
 }
