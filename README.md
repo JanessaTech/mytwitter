@@ -1,6 +1,17 @@
 # The distributed twitter
 Build a distirbuted twitter using go and ethereum blockchain
 
+# Tech stack used in this project
+- gin - Http web framework
+- fx : A dependency injection system
+- koanf : a simple, extremely lightweight, extensible, configuration management library
+- cobra : A CLI application
+- zap : A fast, structured, leveled logging
+- Solidity - Smart contract programming language
+- golang - A popuplar programming language
+- truffle & ganache - tools used to debug&deploy solidity
+- Javascript - scripts used to build/deploy smart contracts
+
 # How to run codes
  - Install ganache and truffle 
  - Start ganache
