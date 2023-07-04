@@ -102,6 +102,7 @@ Run one of the three commands below to start a web server:
 # Send Restful requests (user cases)
 ## Register users
 In postman, send 2 requests with http://127.0.0.1:8080/api/admin/users (POST)
+
 For the first request, request body in the form of json is below:
 ```
 {
@@ -119,7 +120,6 @@ The response returned contains the transaction hash code of this request:
     }
 }
 ```
-
 
 For the second request, request body in the form of json is below:
 ```
@@ -167,7 +167,7 @@ We see response:
 ```
 
 ## Login
-In postman, send one requests to login with http://127.0.0.1:8080/api/admin/users (PUT)
+In postman, send one request to login with http://127.0.0.1:8080/api/admin/users (PUT)
 Request body is like below:
 ```
 {
@@ -198,9 +198,9 @@ We get reponse like below:
     }
 }
 ```
-We notice that the value of "isLogin" for user became true
+We notice that the value of "isLogin" for user1 became true
 ## Check the number of registered users
-Let's check how many users have registered for now.
+Let's check how many users have registered.
 We send the request with http://127.0.0.1:8080/api/admin/users (GET)
 We get reponse like below:
 ```
@@ -212,7 +212,7 @@ We get reponse like below:
     }
 }
 ```
-The response indicates there are 2 users registered. That's correct because we only registered 2 users in the previous step
+The response indicates there are 2 users registered. That's correct because we only registered 2 users in the previous steps
 ## Post message by one logined user
 In postman, send 2 requests by one user to post messages with http://127.0.0.1:8080/api/twitter/posts  (POST)
 For the first request, request body in the form of json is below:
