@@ -124,7 +124,7 @@ The response returned contains the transaction hash code of this request:
 For the second request, request body in the form of json is below:
 ```
 {
-    "name" : "user1",
+    "name" : "user2",
     "password" : "78910"
 }
 ```
